@@ -69,7 +69,8 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
-        .left-container, .right-container {
+        .left-container,
+        .right-container {
             flex: 1;
             padding: 20px;
         }
@@ -82,15 +83,25 @@
             text-align: center;
         }
 
-        .graph, .result {
+        .graph,
+        .result {
             display: none;
             align-items: center;
             justify-content: center;
             height: 300px;
         }
 
-        .graph.active, .result.active {
+        .graph.active,
+        .result.active {
             display: flex;
+        }
+
+        .graph {
+            background: rgba(255, 255, 255, 0); 
+            backdrop-filter: blur(10px);
+            color: #c0c0c0; 
+            padding: 20px;
+            border-radius: 10px;
         }
 
         h1 {
@@ -129,10 +140,10 @@
         <div class="content-section">
             <div class="left-container">
                 <div class="graph" id="graph-section">
-                    <p>Graph will be displayed here</p>
+                    <img src="{{ graph_url }}" alt="Graph" style="filter: invert(1) grayscale(1) brightness(1.5); height: 350px; width: 450px;">
                 </div>
                 <div class="result active" id="result-section">
-                    <p>The predicted wastage food amount is: {{ prediction }}</p>
+                    <p>The predicted wastage of <em style="color: #000;">{{item}}</em> amount is: <em style="color: #000;">{{prediction}}</em></p>
                 </div>
             </div>
         </div>
