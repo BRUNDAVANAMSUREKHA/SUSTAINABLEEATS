@@ -1,6 +1,9 @@
 import pickle
 import numpy as np
-from flask import Flask, render_template, request
+import matplotlib.pyplot as plt
+from flask import Flask, render_template, request, send_file
+import io
+import os
 
 app = Flask(__name__)
 
@@ -20,9 +23,7 @@ def about():
 def contact():
     return render_template('contact.html')
 
-
-
-@app.route('/submit_form', methods=['GET','POST'])
+@app.route('/submit_form', methods=['GET', 'POST'])
 def submit_form():
     if request.method == 'POST':
         # Get form data
@@ -45,8 +46,33 @@ def submit_form():
         # Make prediction
         prediction = model.predict(input_features)
 
+        item = ""
+        value = int(input_features[0][0])
+        if value == 0:
+            item = "Baked Goods"
+        elif value == 1:
+            item = "Dairy Products"
+        elif value == 2:
+            item = "Fruites"
+        elif value == 3:
+            item = "Meat"
+        elif value == 4:
+            item = "Vegetables"
+        else:
+            item = "Other"
+
+        # Generate graph
+        plt.figure(figsize=(10, 6))
+        plt.bar(['Number of Guests', 'Quantity of Food', 'Food Waste'], [number_of_guests, quantity_of_food, prediction[0]])
+        plt.xlabel('Category')
+        plt.ylabel('Value')
+        plt.title('Number of Guests, Quantity of Food, and Prediction')
+        graph_path = os.path.join('static', 'graph.png')
+        plt.savefig(graph_path)
+        plt.close()
+
         # Render result
-        return render_template('result.html', prediction=prediction[0])
+        return render_template('result.html', prediction=prediction[0], item=item, graph_url=graph_path)
 
     return render_template('join.html')
 
